@@ -85,10 +85,7 @@
                         id: peer.id,                        
                         });
 
-                        //enviamos al server nuestro id para que lo mande al moderador
-                        // $.post("/send", function(data, status){
-                        //     alert("Data: " + data + "\nStatus: " + status);
-                        // });     
+                        //enviamos al server nuestro id para que lo mande al moderador                          
                         $.post("/send",{id: peer.id}, function(data){
                             if(data==='funca') {
                                 console.log("Id recibido por el servidor");

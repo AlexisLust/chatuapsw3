@@ -6,6 +6,11 @@
         <title>Peer-to-Peer Moderador</title>
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- Utiilzamos jquery porque nos era mas facil hacer get y post con este framework -->
+
+
+
     </head>
     <body>
         <h1>Peer-to-Peer Cue System --- Sender</h1>
@@ -40,6 +45,7 @@
         <p id="historialchat"></p>
 
         <script src="https://cdn.jsdelivr.net/npm/peerjs@1.2.0/dist/peerjs.min.js"></script>
+
         <script type="text/javascript">
         var idcliente= null;
             (function () {
@@ -121,52 +127,30 @@
 
                 /**
                  * Create the connection between the two Peers.
-                 *
-                 * Sets up callbacks that handle any events related to the
-                 * connection and data received on it.
                  */
-                function getHistorial() {
-                    $.get('/historial',mostrarhistorial);
-                };
-
-                //manipulamos datos historial recibidos en esta funcion
-                function mostrarhistorial(data) {
-                    var parseado = new Array();
-                    parseado = JSON.parse(data);
-                    parseado = parseado.split(',');
-                    
-                    console.log(parseado.length);
-                    var i;
-                    for (i = 0; i < parseado.length; i++) {
-                    txt += parseado[i] + "<br>";
-                    }
-                    console.log(txt);
-                    historialchat.innerHTML = "";
-                    historialchat.innerHTML = txt;
-                    txt = "";//reseteamos txt
-                };
-
-
                 function join() {
                     // Close old connection
                     if (conn) {
                         conn.close();
                     }
 
-                    // Creamos la conexion con el id que recibimos del server con Ajax y GET
-                    //var data = null;
-                    
-                    $.get('/test',fxaux);
+                    // Creamos la conexion con el id que recibimos del server con Jquery y GET
+                                      
+
+                    //codigo nuestro -------------------------------------------------------------------------------------------------------------------
+
+
+                    $.get('/enviarid',datosRecibidos);//utiliza funcion para manipular los datos recibidos
 
                 };
 
                 
 
-                function fxaux(data, textStatus, jqXHR) {  // success callback
+                function datosRecibidos(data, textStatus, jqXHR) {  // success callback
                         //alert('status: ' + textStatus + ', data:' + data);
                         recvIdInput= data;
                             console.log("valor de variable "+recvIdInput);
-                            conn = peer.connect(recvIdInput, {
+                            conn = peer.connect(recvIdInput, {//aca le enviamos a peerjs en recvdIdInput el id de cliente que recibimos de nodejs
                                 
                                 reliable: true
                             });
@@ -205,12 +189,32 @@
                         });
                 };
 
-                /**
-                 * Get first "GET style" parameter from href.
-                 * This enables delivering an initial command upon page load.
-                 *
-                 * Would have been easier to use location.hash.
-                 */
+
+                function getHistorial() {
+                    $.get('/historial',mostrarhistorial);
+                };
+
+                //manipulamos datos historial recibidos en esta funcion
+                function mostrarhistorial(data) {
+                    var parseado = new Array();
+                    parseado = JSON.parse(data);
+                    parseado = parseado.split(',');
+                    
+                    console.log(parseado.length);
+                    var i;
+                    for (i = 0; i < parseado.length; i++) {
+                    txt += parseado[i] + "<br>";
+                    }
+                    console.log(txt);
+                    historialchat.innerHTML = "";
+                    historialchat.innerHTML = txt;
+                    txt = "";//reseteamos txt
+                };
+                //--------------------------------------------------------
+                
+
+
+                
                 function getUrlParam(name) {
                     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
                     var regexS = "[\\?&]" + name + "=([^&#]*)";
@@ -222,10 +226,7 @@
                         return results[1];
                 };
 
-                /**
-                 * Send a signal via the peer connection and add it to the log.
-                 * This will only occur if the connection is still alive.
-                 */
+                
                  function signal(sigName) {
                     if (conn && conn.open) {
                         conn.send(sigName);

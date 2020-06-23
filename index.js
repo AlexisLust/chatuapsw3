@@ -1,8 +1,9 @@
 const express = require('express');
 const { Router } = require('express');
+//usamos express porque era conveniente para facilitar la creacion del backend, con menos lineas, simplificando para hacer mas mantenible el codigo (mantenibilidad)
 const app = express();
 const port = process.env.PORT || 3000;
-const www = process.env.WWW || './public';
+const www = process.env.WWW || './public';//usamos public por seguridad
 
 //Para hacer GETS y POSTS de cliente y moderador
 const bodyParser = require("body-parser");
@@ -19,14 +20,12 @@ app.get('/', (req, res) => {
     res.sendFile(`index.html`, { root: www });
 });
 
-// app.post('/', (req, res) => {
-//     console.log('Got id:', req.body);
-//     res.sendStatus(200);
-// });
+
 
 var clienteids = new Array();
-var historial = new Array();
+var historial = new Array();//historial en este demo solo se guarda en memoria, pero se podria utilizar los metodos para que traigan de una base de datos
 
+//post id desde cliente
 app.post('/send',(req, res) => {
     var id=req.body.id;    
     console.log("Id de cliente= "+id);
@@ -36,7 +35,7 @@ app.post('/send',(req, res) => {
  }); 
 
 
- app.get('/test', function(req,res) {
+ app.get('/enviarid', function(req,res) {
     var cliente = clienteids[0]
     //elimino de la lista de espera de clientes con shift
     clienteids.shift();
