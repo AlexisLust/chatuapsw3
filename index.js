@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
 // });
 
 var clienteids = new Array();
+var historial = new Array();
 
 app.post('/send',(req, res) => {
     var id=req.body.id;    
@@ -41,5 +42,21 @@ app.post('/send',(req, res) => {
     clienteids.shift();
     res.send(cliente);
 });
+
+
+//recibir el historial de chat
+app.post('/save',(req, res) => {
+    historial= req.body.historial;    
+    console.log("Historial= "+historial);
+    res.end("funca");
+    
+ }); 
+
+ app.get('/historial', function(req,res) {
+    var jsoneado = JSON.stringify(historial);
+    console.log("Ultima conversacion enviada");
+    res.send(jsoneado);
+});
+
 
 app.listen(port, () => console.log(`listening on http://localhost:${port}`));
